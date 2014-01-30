@@ -50,10 +50,10 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', ($
 		
 		$scope.displayedUsers = filteredUsers.slice firstIndex, lastIndex
 
-
-	User.query (data) ->
-		$scope.users = data.users
-		displayUsers()
+	updateUsers = ->
+		User.query (data) ->
+			$scope.users = data.users
+			displayUsers()
 
 	$scope.showAddUserRow = ->
 		$scope.isAddRowShown = true
@@ -86,7 +86,13 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', ($
 			$scope.filterQuery = newValue
 		displayUsers()
 
-	$scope.destroy = (userId) ->
+	$scope.destroy = (email) ->
 		if confirm('Sure?')
-			(new User()).$remove userId : userId, -> $route.reload()
+			updatedUsers = []
+			for user in $scope.users
+				updatedUsers.push user unless user['email'] == email
+			$scope.users = updatedUsers
+			User.store {users: $scope.users}, -> updateUsers()
+	
+	updateUsers()
 ]

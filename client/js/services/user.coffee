@@ -7,6 +7,10 @@ angular.module('xuServices').factory 'User', ['$resource', 'config', ($resource,
 				method: 'GET'
 				params:
 					script: 'list'
+			store:
+				method: 'POST'
+				params:
+					script: 'store'
 		}
 	)
 ]
