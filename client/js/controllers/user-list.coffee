@@ -142,10 +142,5 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', 'i
 			$scope.users = updatedUsers
 			User.store {users: $scope.users}, -> loadUsers()
 	
-	###		
-	window.onbeforeunload = (event) ->
-		return "There are unsaved changes"# if ($scope.editingRow != null || $scope.isAddRowShown)
-	###
-	
 	loadUsers()
 ]
