@@ -31,3 +31,15 @@
 	color: #0000ff;
 	float: right;
 }
+
+.users-table {
+	th.sortable {
+		min-width: 100px;
+	}
+	input {
+		padding: 3px;
+		border: 1px solid #000;
+		width: auto;
+	}
+	
+}

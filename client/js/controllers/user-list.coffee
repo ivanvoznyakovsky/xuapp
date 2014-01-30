@@ -1,4 +1,4 @@
-window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', ($scope, $route, $filter, User) ->
+window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', 'indexateFilter', ($scope, $route, $filter, User, indexateFilter) ->
 	$scope.currentPage = 0
 	$scope.perPage = 10
 	$scope.numberOfPages = 0
@@ -6,6 +6,12 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', ($
 	$scope.isAddRowShown = false
 	$scope.orderType = 'email'
 	$scope.filterQuery = null
+	
+	$scope.editingRow = null
+	$scope.editingUser = {}
+	
+	$scope.newUser =
+		active: false
 
 	displayUsers = ->
 		return unless $scope.users
@@ -27,7 +33,7 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', ($
 
 			result * sortDirection
 		)
-		#
+		
 		if $scope.filterQuery
 			$scope.filterQuery = $scope.filterQuery.toLowerCase()
 			filteredUsers = []
@@ -50,16 +56,10 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', ($
 		
 		$scope.displayedUsers = filteredUsers.slice firstIndex, lastIndex
 
-	updateUsers = ->
+	loadUsers = ->
 		User.query (data) ->
-			$scope.users = data.users
+			$scope.users = indexateFilter data.users
 			displayUsers()
-
-	$scope.showAddUserRow = ->
-		$scope.isAddRowShown = true
-
-	$scope.hideAddUserRow = ->
-		$scope.isAddRowShown = false
 
 	$scope.previousPage = ->
 		$scope.currentPage--
@@ -85,14 +85,67 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', ($
 		else  
 			$scope.filterQuery = newValue
 		displayUsers()
+	
+	getIndexByEmail = (email) ->
+		for user in $scope.users
+			return user.originalIndex if user['email'] == email
+		-1 # not found
+	
+	$scope.addUser = ->
+		if not $scope.newUser.email || not $scope.newUser.firstname || not $scope.newUser.lastname
+			#TODO: display error nicely
+			alert('Please fill required fields')
+			return
+		if getIndexByEmail($scope.newUser.email) >= 0
+			#TODO: display error nicely
+			alert('Email ' + $scope.newUser.email + ' is already taken')
+			return
+		newUser = 
+			firstname: $scope.newUser.firstname
+			lastname: $scope.newUser.lastname
+			age: $scope.newUser.age
+			email: $scope.newUser.email
+			active: $scope.newUser.active
+			created_on: (new Date()).getTime()
+			last_edited: (new Date()).getTime()
+		$scope.users.push newUser
+		$scope.isAddRowShown = false
+		User.store {users: $scope.users}, -> loadUsers()
 
+	$scope.updateUser = ->
+		if not $scope.editingUser.email || not $scope.editingUser.firstname || not $scope.editingUser.lastname
+			#TODO: display error nicely
+			alert('Please fill required fields')
+			return
+		if getIndexByEmail($scope.editingUser.email) >= 0 && getIndexByEmail($scope.editingUser.email) != $scope.editingUser.originalIndex
+			#TODO: display error nicely
+			alert('Email ' + $scope.editingUser.email + ' is already taken')
+			return
+		$scope.editingUser.last_edited = (new Date()).getTime()
+		$scope.users[$scope.editingUser.originalIndex] = $scope.editingUser
+		User.store {users: $scope.users}, -> loadUsers()
+		$scope.cancelEdit()
+
+	$scope.edit = (index) ->
+		$scope.editingRow = index
+		$scope.editingUser = angular.copy($scope.displayedUsers[index])
+
+	$scope.cancelEdit = () ->
+		$scope.editingRow = null
+		$scope.editingUser = null
+		
 	$scope.destroy = (email) ->
 		if confirm('Sure?')
 			updatedUsers = []
 			for user in $scope.users
 				updatedUsers.push user unless user['email'] == email
 			$scope.users = updatedUsers
-			User.store {users: $scope.users}, -> updateUsers()
+			User.store {users: $scope.users}, -> loadUsers()
 	
-	updateUsers()
+	###		
+	window.onbeforeunload = (event) ->
+		return "There are unsaved changes"# if ($scope.editingRow != null || $scope.isAddRowShown)
+	###
+	
+	loadUsers()
 ]
