@@ -1,0 +1,33 @@
+.table-filter {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	input {
+		padding: 5px;
+		border: 1px solid #000;
+	}
+}
+
+.table-controls {
+	.table-pager {
+		float: left;
+	}
+	.table-actions {
+		float: right;
+	}
+	.clear {
+		clear: both;
+	}
+}
+
+.add-user-row {
+	input {
+		padding: 3px;
+		border: 1px solid #000;
+	}
+}
+
+.order-marker {
+	font-weight: normal;
+	color: #0000ff;
+	float: right;
+}

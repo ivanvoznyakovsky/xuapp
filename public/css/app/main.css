@@ -1,0 +1,36 @@
+/* line 1, ../../../client/scss/main.scss */
+.table-filter {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+/* line 4, ../../../client/scss/main.scss */
+.table-filter input {
+  padding: 5px;
+  border: 1px solid #000;
+}
+
+/* line 11, ../../../client/scss/main.scss */
+.table-controls .table-pager {
+  float: left;
+}
+/* line 14, ../../../client/scss/main.scss */
+.table-controls .table-actions {
+  float: right;
+}
+/* line 17, ../../../client/scss/main.scss */
+.table-controls .clear {
+  clear: both;
+}
+
+/* line 23, ../../../client/scss/main.scss */
+.add-user-row input {
+  padding: 3px;
+  border: 1px solid #000;
+}
+
+/* line 29, ../../../client/scss/main.scss */
+.order-marker {
+  font-weight: normal;
+  color: #0000ff;
+  float: right;
+}

@@ -1,0 +1,26 @@
+{
+  "name": "XuApp",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-contrib-compass": "*",
+    "grunt-angular-templates": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-compress": "~0.5.0",
+    "grunt-yui-compressor": "*",
+    "grunt-contrib-cssmin": "~0.6.2",
+    "karma": "*",
+    "karma-commonjs": "*",
+    "karma-coffee-preprocessor": "*",
+    "karma-ng-scenario": "*",
+    "karma-junit-reporter": "*",
+    "protractor": "~0.15.0"
+  },
+  "scripts": {
+    "test": "karma start client/test/karma.conf.js"
+  }
+}
