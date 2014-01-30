@@ -40,6 +40,10 @@
 		padding: 3px;
 		border: 1px solid #000;
 		width: auto;
+		
+		&.age-input {
+			width: 30px;
+		}
 	}
 	
 }

@@ -53,9 +53,9 @@
 	</thead>
 	<tbody>
 	  <tr class="add-user-row" ng-show="isAddRowShown">
-      <td><input type="text" ng-model="newUser.lastname" placeholder="Last Name"/></td>
-      <td><input type="text" ng-model="newUser.firstname" placeholder="First Name"/></td>
-      <td><input type="text" ng-model="newUser.age" placeholder="Age"/></td>
+      <td><input type="text" ng-model="newUser.lastname" placeholder="Last Name" required ng-required/></td>
+      <td><input type="text" ng-model="newUser.firstname" placeholder="First Name" required ng-required/></td>
+      <td><input type="text" ng-model="newUser.age" placeholder="Age" class="age-input" required ng-required/></td>
       <td><input type="text" ng-model="newUser.email" placeholder="Email"/></td>
       <td></td>
       <td></td>
@@ -66,19 +66,19 @@
 		<tr ng-repeat="user in displayedUsers">
 			<td>
 			  <span ng-hide="editingRow==$index">{{user.lastname}}</span>
-			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.lastname" placeholder="Last Name"/>
+			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.lastname" placeholder="Last Name" required ng-required/>
 			</td>
 			<td>
 			  <span ng-hide="editingRow==$index">{{user.firstname}}</span>
-			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.firstname" placeholder="First Name"/>
+			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.firstname" placeholder="First Name" required ng-required />
 			</td>
 			<td>
 			  <span ng-hide="editingRow==$index">{{user.age}}</span>
-			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.age" placeholder="Age"/>
+			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.age" placeholder="Age" class="age-input"/>
 			</td>
 			<td>
 			  <span ng-hide="editingRow==$index">{{user.email}}</span>
-			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.email" placeholder="Email"/>
+			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.email" placeholder="Email" required ng-required/>
 			</td>
 			<td><span ng-hide="editingRow==$index">{{user.created_on | date:'MM/dd/yyyy hh:mm:ss a'}}</span></td>
 			<td><span ng-hide="editingRow==$index">{{user.last_edited | date:'MM/dd/yyyy hh:mm:ss a'}}</span></td>

@@ -15,7 +15,7 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', 'i
 
 	displayUsers = ->
 		return unless $scope.users
-		sortedUsers = $scope.users.sort((a,b) ->
+		sortedUsers = angular.copy($scope.users).sort((a,b) ->
 			if $scope.orderType.indexOf('-') == 0 
 				sortField = $scope.orderType.substr(1)
 				sortDirection = -1
