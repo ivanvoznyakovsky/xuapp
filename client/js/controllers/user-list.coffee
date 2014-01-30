@@ -1,20 +1,28 @@
 window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', '$window', 'User', 'indexateFilter', ($scope, $route, $filter, $window, User, indexateFilter) ->
+	# paging 
 	$scope.currentPage = 0
 	$scope.perPage = 10
 	$scope.numberOfPages = 0
 	
-	$scope.isAddRowShown = false
+	# sorting and filtering
 	$scope.orderType = 'email'
 	$scope.filterQuery = null
 	
+	# helper field for currently editing user (one at any moment)
 	$scope.editingRow = null
 	$scope.editingUser = {}
-	
+
+	# should the new user row be displayed	
+	$scope.isAddRowShown = false
+	# default value for a new user
 	$scope.newUser =
 		active: false
 
+	# performs sorting, filtering and paging of the users array, the original array is not affected
 	displayUsers = ->
 		return unless $scope.users
+		
+		# Sorting here has the extended conditions, so we can adjust sorting for different column types in future
 		sortedUsers = angular.copy($scope.users).sort((a,b) ->
 			if $scope.orderType.indexOf('-') == 0 
 				sortField = $scope.orderType.substr(1)
@@ -34,6 +42,7 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', '$window',
 			result * sortDirection
 		)
 		
+		# Filtering on all fields, normalized to lowercase, for dates - using the date format
 		if $scope.filterQuery
 			$scope.filterQuery = $scope.filterQuery.toLowerCase()
 			filteredUsers = []
@@ -46,6 +55,7 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', '$window',
 			filteredUsers = sortedUsers
 
 
+		# Slicing the filtered and sorted results to show only one page
 		$scope.numberOfPages = if filteredUsers.length % $scope.perPage == 0 then (filteredUsers.length / $scope.perPage - 1) else (Math.floor(filteredUsers.length / $scope.perPage)) 
 		firstIndex = $scope.currentPage * $scope.perPage
 		lastIndex = firstIndex + $scope.perPage
@@ -56,19 +66,23 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', '$window',
 		
 		$scope.displayedUsers = filteredUsers.slice firstIndex, lastIndex
 
+	# Loads the list of users from the server, replaces the current state
 	loadUsers = ->
 		User.query (data) ->
 			$scope.users = indexateFilter data.users
 			displayUsers()
 
+	# Go to previous page, I don't have check for page existance, because there's a check in the view - it wouldn't show a button if it's not available
 	$scope.previousPage = ->
 		$scope.currentPage--
 		displayUsers()
 
+	# Go to next page, I don't have check for page existance, because there's a check in the view - it wouldn't show a button if it's not available
 	$scope.nextPage = ->
 		$scope.currentPage++
 		displayUsers()
 
+	# Sets the order field and direction, if field name is the same as before - changes direction, otherwise - field name
 	$scope.setOrder = (fieldName) ->
 		if $scope.orderType == fieldName
 			$scope.orderType = ('-' + fieldName)
@@ -79,6 +93,7 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', '$window',
 				$scope.orderType = fieldName
 		displayUsers()
 
+	# Here we watch for the changes of the query field, and filter the records accordingly, paging is regenerated in this case
 	$scope.$watch 'query', (newValue, oldValue) ->
 		if newValue == '' 
 			$scope.filterQuery = null
@@ -86,18 +101,20 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', '$window',
 			$scope.filterQuery = newValue
 		displayUsers()
 	
+	# Helper method used to check is the email address unique, and to get the original index in the users database if not unique
 	getIndexByEmail = (email) ->
 		for user in $scope.users
 			return user.originalIndex if user['email'] == email
 		-1 # not found
 	
+	# Stores a new user in memory and persists it to the server API
 	$scope.addUser = ->
 		if not $scope.newUser.email || not $scope.newUser.firstname || not $scope.newUser.lastname
-			#TODO: display error nicely
+			#TODO: display errors nicely
 			alert('Please fill required fields')
 			return
 		if getIndexByEmail($scope.newUser.email) >= 0
-			#TODO: display error nicely
+			#TODO: display errors nicely
 			alert('Email ' + $scope.newUser.email + ' is already taken')
 			return
 		newUser = 
@@ -112,6 +129,7 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', '$window',
 		$scope.isAddRowShown = false
 		User.store {users: $scope.users}, -> loadUsers()
 
+	# Updates existing user in memory and persists it to the server API
 	$scope.updateUser = ->
 		if not $scope.editingUser.email || not $scope.editingUser.firstname || not $scope.editingUser.lastname
 			#TODO: display error nicely
@@ -126,14 +144,19 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', '$window',
 		User.store {users: $scope.users}, -> loadUsers()
 		$scope.cancelEdit()
 
+	# Toggle inline edit mode on. Use deep copy of edited item, to preserve original content.
 	$scope.edit = (index) ->
 		$scope.editingRow = index
 		$scope.editingUser = angular.copy($scope.displayedUsers[index])
 
+	# Toggle inline mode off, reset state of the form.
 	$scope.cancelEdit = () ->
 		$scope.editingRow = null
 		$scope.editingUser = null
-		
+		# No changes - reset form to pristine state
+		$scope.usersForm.$setPristine()
+	
+	# Deletes existing user in memory and persists it to the server API
 	$scope.destroy = (email) ->
 		if confirm('Sure?')
 			updatedUsers = []
@@ -142,10 +165,13 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', '$window',
 			$scope.users = updatedUsers
 			User.store {users: $scope.users}, -> loadUsers()
 
+	# Tricky hook for catching the dirty state of the form
 	$scope.$watch 'usersForm.$dirty', (isDirty) ->
 		if isDirty
 			$window.onbeforeunload = () ->
-				'You haven\'t save your changes';
+				'You haven\'t save your changes'
+		else
+			$window.onbeforeunload = null
 	
 	loadUsers()
 ]

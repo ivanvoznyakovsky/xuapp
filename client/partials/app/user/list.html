@@ -1,6 +1,6 @@
 <h1>User List</h1>
 <div class="table-filter">
-  <input type="text" placeholder="Filter users" ng-model="query"/>
+  <input type="text" placeholder="Filter users" ng-model="query"/> <a class="btn" ng-show="query.length > 0" ng-click="query=''">Clear</a>
 </div>
 <div class="table-controls">
   <div class="table-pager">
@@ -61,7 +61,7 @@
       <td></td>
       <td></td>
       <td><a class="btn" ng-click="newUser.active = ! newUser.active"><input type="hidden" ng-model="newUser.active"/>{{newUser.active?'Active':'Inactive'}}</a></td>
-      <td><a class="btn" ng-click="isAddRowShown = false;newUser = null">Cancel</a></td>
+      <td><a class="btn" ng-click="isAddRowShown = false;newUser = null;usersForm.$setPristine()">Cancel</a></td>
       <td><a class="btn" ng-click="addUser()">Save</a></td>
 	  </tr>
 		<tr ng-repeat="user in displayedUsers">
