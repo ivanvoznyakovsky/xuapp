@@ -1,4 +1,4 @@
-window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', 'indexateFilter', ($scope, $route, $filter, User, indexateFilter) ->
+window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', '$window', 'User', 'indexateFilter', ($scope, $route, $filter, $window, User, indexateFilter) ->
 	$scope.currentPage = 0
 	$scope.perPage = 10
 	$scope.numberOfPages = 0
@@ -141,6 +141,11 @@ window.app.controller 'UserListCtrl', ['$scope', '$route', '$filter', 'User', 'i
 				updatedUsers.push user unless user['email'] == email
 			$scope.users = updatedUsers
 			User.store {users: $scope.users}, -> loadUsers()
+
+	$scope.$watch 'usersForm.$dirty', (isDirty) ->
+		if isDirty
+			$window.onbeforeunload = () ->
+				'You haven\'t save your changes';
 	
 	loadUsers()
 ]

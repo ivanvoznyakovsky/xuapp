@@ -11,6 +11,7 @@
   </div>
   <div class="clear"></div>
 </div>
+<form name="usersForm">
 <table class="table table-striped table-bordered users-table">
 	<thead>
 		<tr>
@@ -60,7 +61,7 @@
       <td></td>
       <td></td>
       <td><a class="btn" ng-click="newUser.active = ! newUser.active"><input type="hidden" ng-model="newUser.active"/>{{newUser.active?'Active':'Inactive'}}</a></td>
-      <td><a class="btn" ng-click="isAddRowShown = false">Cancel</a></td>
+      <td><a class="btn" ng-click="isAddRowShown = false;newUser = null">Cancel</a></td>
       <td><a class="btn" ng-click="addUser()">Save</a></td>
 	  </tr>
 		<tr ng-repeat="user in displayedUsers">
@@ -97,3 +98,4 @@
 		</tr>
 	</tbody>
 </table>
+</form>
