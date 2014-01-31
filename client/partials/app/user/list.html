@@ -1,6 +1,7 @@
 <h1>User List</h1>
 <div class="table-filter">
-  <input type="text" placeholder="Filter users" ng-model="query"/> <a class="btn" ng-show="query.length > 0" ng-click="query=''">Clear</a>
+  <input type="text" placeholder="Filter users" ng-model="query"/>
+  <a class="btn" ng-show="query.length > 0" ng-click="query=''">Clear</a>
 </div>
 <div class="table-controls">
   <div class="table-pager">
@@ -12,90 +13,103 @@
   <div class="clear"></div>
 </div>
 <form name="usersForm">
-<table class="table table-striped table-bordered users-table">
-	<thead>
-		<tr>
-			<th ng-click="setOrder('lastname')" class="sortable">
-			  Last Name
-			  <div class="order-marker" ng-show="orderType=='lastname'">A</div>
-			  <div class="order-marker" ng-show="orderType=='-lastname'">D</div>
-			</th>
-			<th ng-click="setOrder('firstname')" class="sortable">
-			  First Name
-        <div class="order-marker" ng-show="orderType=='firstname'">A</div>
-        <div class="order-marker" ng-show="orderType=='-firstname'">D</div>
-			</th>
-			<th ng-click="setOrder('age')" class="sortable">
-			  Age
-        <div class="order-marker" ng-show="orderType=='age'">A</div>
-        <div class="order-marker" ng-show="orderType=='-age'">D</div>
-			</th>
-			<th ng-click="setOrder('email')" class="sortable">
-			  Email
-        <div class="order-marker" ng-show="orderType=='email'">A</div>
-        <div class="order-marker" ng-show="orderType=='-email'">D</div>
-			</th>
-			<th ng-click="setOrder('created_on')" class="sortable">
-			  Created on
-        <div class="order-marker" ng-show="orderType=='created_on'">A</div>
-        <div class="order-marker" ng-show="orderType=='-created_on'">D</div>
-			</th>
-			<th ng-click="setOrder('last_edited')" class="sortable">
-			  Last Edited
-        <div class="order-marker" ng-show="orderType=='last_edited'">A</div>
-        <div class="order-marker" ng-show="orderType=='-last_edited'">D</div>
-			</th>
-			<th colspan="3"  ng-click="setOrder('active')" class="sortable">
-			  Active
-        <div class="order-marker" ng-show="orderType=='active'">A</div>
-        <div class="order-marker" ng-show="orderType=='-active'">D</div>
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-	  <tr class="add-user-row" ng-show="isAddRowShown">
-      <td><input type="text" ng-model="newUser.lastname" placeholder="Last Name" required ng-required/></td>
-      <td><input type="text" ng-model="newUser.firstname" placeholder="First Name" required ng-required/></td>
-      <td><input type="text" ng-model="newUser.age" placeholder="Age" class="age-input" required ng-required/></td>
-      <td><input type="text" ng-model="newUser.email" placeholder="Email"/></td>
-      <td></td>
-      <td></td>
-      <td><a class="btn" ng-click="newUser.active = ! newUser.active"><input type="hidden" ng-model="newUser.active"/>{{newUser.active?'Active':'Inactive'}}</a></td>
-      <td><a class="btn" ng-click="isAddRowShown = false;newUser = null;usersForm.$setPristine()">Cancel</a></td>
-      <td><a class="btn" ng-click="addUser()">Save</a></td>
-	  </tr>
-		<tr ng-repeat="user in displayedUsers">
-			<td>
-			  <span ng-hide="editingRow==$index">{{user.lastname}}</span>
-			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.lastname" placeholder="Last Name" required ng-required/>
-			</td>
-			<td>
-			  <span ng-hide="editingRow==$index">{{user.firstname}}</span>
-			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.firstname" placeholder="First Name" required ng-required />
-			</td>
-			<td>
-			  <span ng-hide="editingRow==$index">{{user.age}}</span>
-			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.age" placeholder="Age" class="age-input"/>
-			</td>
-			<td>
-			  <span ng-hide="editingRow==$index">{{user.email}}</span>
-			  <input ng-show="editingRow==$index" type="text" ng-model="editingUser.email" placeholder="Email" required ng-required/>
-			</td>
-			<td><span ng-hide="editingRow==$index">{{user.created_on | date:'MM/dd/yyyy hh:mm:ss a'}}</span></td>
-			<td><span ng-hide="editingRow==$index">{{user.last_edited | date:'MM/dd/yyyy hh:mm:ss a'}}</span></td>
-			<td>
-			  <span ng-hide="editingRow==$index">{{user.active ? 'Active' : 'Inactive'}}</span>
-			  <a ng-show="editingRow==$index" class="btn" ng-click="editingUser.active = ! editingUser.active"><input type="hidden" ng-model="editingUser.active"/>{{editingUser.active?'Active':'Inactive'}}</a>
-			</td>
-			<td>
-			  <a class="btn" ng-hide="editingRow==$index" ng-click="destroy(user.email)">Delete</a>
-        <a class="btn" ng-show="editingRow==$index" ng-click="cancelEdit($index)">Cancel</a>
-			</td>
-			<td>
-			  <a class="btn" ng-hide="editingRow==$index" ng-click="edit($index)">Edit</a>
-			  <a class="btn" ng-show="editingRow==$index" ng-click="updateUser($index)">Save</a>
-			</td>
-		</tr>
-	</tbody>
-</table>
+  <table class="table table-striped table-bordered users-table">
+    <thead>
+      <tr>
+        <th ng-click="setOrder('lastname')" class="sortable"> Last Name
+        <div class="order-marker" ng-show="orderType=='lastname'">
+          A
+        </div>
+        <div class="order-marker" ng-show="orderType=='-lastname'">
+          D
+        </div></th>
+        <th ng-click="setOrder('firstname')" class="sortable"> First Name
+        <div class="order-marker" ng-show="orderType=='firstname'">
+          A
+        </div>
+        <div class="order-marker" ng-show="orderType=='-firstname'">
+          D
+        </div></th>
+        <th ng-click="setOrder('age')" class="sortable"> Age
+        <div class="order-marker" ng-show="orderType=='age'">
+          A
+        </div>
+        <div class="order-marker" ng-show="orderType=='-age'">
+          D
+        </div></th>
+        <th ng-click="setOrder('email')" class="sortable"> Email
+        <div class="order-marker" ng-show="orderType=='email'">
+          A
+        </div>
+        <div class="order-marker" ng-show="orderType=='-email'">
+          D
+        </div></th>
+        <th ng-click="setOrder('created_on')" class="sortable"> Created on
+        <div class="order-marker" ng-show="orderType=='created_on'">
+          A
+        </div>
+        <div class="order-marker" ng-show="orderType=='-created_on'">
+          D
+        </div></th>
+        <th ng-click="setOrder('last_edited')" class="sortable"> Last Edited
+        <div class="order-marker" ng-show="orderType=='last_edited'">
+          A
+        </div>
+        <div class="order-marker" ng-show="orderType=='-last_edited'">
+          D
+        </div></th>
+        <th colspan="3"  ng-click="setOrder('active')" class="sortable"> Active
+        <div class="order-marker" ng-show="orderType=='active'">
+          A
+        </div>
+        <div class="order-marker" ng-show="orderType=='-active'">
+          D
+        </div></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="add-user-row" ng-show="isAddRowShown">
+        <td>
+        <input type="text" ng-model="newUser.lastname" placeholder="Last Name" required ng-required/>
+        </td>
+        <td>
+        <input type="text" ng-model="newUser.firstname" placeholder="First Name" required ng-required/>
+        </td>
+        <td>
+        <input type="text" ng-model="newUser.age" placeholder="Age" class="age-input" required ng-required/>
+        </td>
+        <td>
+        <input type="text" ng-model="newUser.email" placeholder="Email"/>
+        </td>
+        <td></td>
+        <td></td>
+        <td><a class="btn" ng-click="newUser.active = ! newUser.active">
+        <input type="hidden" ng-model="newUser.active"/>
+        {{newUser.active?'Active':'Inactive'}}</a></td>
+        <td><a class="btn" ng-click="isAddRowShown = false;newUser = null;usersForm.$setPristine()">Cancel</a></td>
+        <td><a class="btn" ng-click="addUser()">Save</a></td>
+      </tr>
+      <tr ng-repeat="user in displayedUsers">
+        <td><span ng-hide="editingRow==$index">{{user.lastname}}</span>
+        <input ng-show="editingRow==$index" type="text" ng-model="editingUser.lastname" placeholder="Last Name" required ng-required/>
+        </td>
+        <td><span ng-hide="editingRow==$index">{{user.firstname}}</span>
+        <input ng-show="editingRow==$index" type="text" ng-model="editingUser.firstname" placeholder="First Name" required ng-required />
+        </td>
+        <td><span ng-hide="editingRow==$index">{{user.age}}</span>
+        <input ng-show="editingRow==$index" type="text" ng-model="editingUser.age" placeholder="Age" class="age-input"/>
+        </td>
+        <td><span ng-hide="editingRow==$index">{{user.email}}</span>
+        <input ng-show="editingRow==$index" type="text" ng-model="editingUser.email" placeholder="Email" required ng-required/>
+        </td>
+        <td><span ng-hide="editingRow==$index">{{user.created_on | date:'MM/dd/yyyy hh:mm:ss a'}}</span></td>
+        <td><span ng-hide="editingRow==$index">{{user.last_edited | date:'MM/dd/yyyy hh:mm:ss a'}}</span></td>
+        <td><span ng-hide="editingRow==$index">{{user.active ? 'Active' : 'Inactive'}}</span><a ng-show="editingRow==$index" class="btn" ng-click="editingUser.active = ! editingUser.active">
+        <input type="hidden" ng-model="editingUser.active"/>
+        {{editingUser.active?'Active':'Inactive'}}</a></td>
+        <td><a class="btn" ng-hide="editingRow==$index" ng-click="destroy(user.email)">Delete</a><a class="btn" ng-show="editingRow==$index" ng-click="cancelEdit($index)">Cancel</a></td>
+        <td><a class="btn" ng-hide="editingRow==$index" ng-click="edit($index)">Edit</a><a class="btn" ng-show="editingRow==$index" ng-click="updateUser($index)">Save</a></td>
+      </tr>
+    </tbody>
+  </table>
 </form>

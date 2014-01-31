@@ -1,71 +1,68 @@
 module.exports = function(config) {
-	config.set({
-		// base path, that will be used to resolve files and exclude
-		basePath : '../..',
+  config.set({
+    // base path, that will be used to resolve files and exclude
+    basePath : '../..',
 
-		frameworks : ['jasmine'],
+    frameworks : ['jasmine'],
 
-		// list of files / patterns to load in the browser
-		files : [
-			'client/vendor/js/angular/angular.js',
-			'client/vendor/js/angular/angular-route.js',
-			'client/vendor/js/angular/angular-resource.js',
-			'client/vendor/js/angular/angular-mocks.js',
-			'client/vendor/js/underscore.js',
-			'public/js/*.js',
-			'client/test/unit/*.js'
-		],
-		
-		preprocessors: {
-			'**/*.coffee' : ['coffee']
-		},
-		
-		coffeePreprocessor: {
-			options: {
-				bare: true,
-				sourceMap: false
-			},
-			transformPath: function(path) {
-				return path.replace(/\.js$/, '.coffee');
-			}
-		},
+    // list of files / patterns to load in the browser
+    files : [
+      'client/vendor/js/angular/angular.js',
+      'client/vendor/js/angular/angular-route.js',
+      'client/vendor/js/angular/angular-resource.js',
+      'client/vendor/js/angular/angular-mocks.js',
+      'client/vendor/js/underscore.js',
+      'public/js/*.js',
+      'client/test/unit/*.js'
+    ],
 
-		reporters : ['progress'],
+    preprocessors : {
+      '**/*.coffee' : ['coffee']
+    },
 
-		port : 9876,
+    coffeePreprocessor : {
+      options : {
+        bare : true,
+        sourceMap : false
+      },
+      transformPath : function(path) {
+        return path.replace(/\.js$/, '.coffee');
+      }
+    },
 
-		colors : true,
+    reporters : ['progress'],
 
-		logLevel : config.LOG_INFO,
-		
-		loggers: [
-			{
-				type: 'console'
-			}, 
-			{
-				type: "file", 
-				filename:"./log/karma.log", 
-				"maxLogSize": 10000000,
-				"backups": 0
-			}
-		],
+    port : 9876,
 
-		autoWatch : true,
+    colors : true,
 
-		browsers : ['Firefox'],
+    logLevel : config.LOG_INFO,
 
-		captureTimeout : 20000,
+    loggers : [{
+      type : 'console'
+    }, {
+      type : "file",
+      filename : "./log/karma.log",
+      "maxLogSize" : 10000000,
+      "backups" : 0
+    }],
 
-		singleRun : true,
+    autoWatch : true,
 
-		reportSlowerThan : 500,
+    browsers : ['Firefox'],
 
-		plugins : [
-			'karma-jasmine', 
-			'karma-chrome-launcher', 
-			'karma-firefox-launcher', 
-			'karma-junit-reporter', 
-			'karma-commonjs'
-		]
-	});
-}; 
+    captureTimeout : 20000,
+
+    singleRun : true,
+
+    reportSlowerThan : 500,
+
+    plugins : [
+      'karma-jasmine', 
+      'karma-chrome-launcher', 
+      'karma-firefox-launcher', 
+      'karma-junit-reporter', 
+      'karma-commonjs'
+    ]
+  });
+};
